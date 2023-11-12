@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FiniteElement {
-    protected AtomicInteger idGenerator = new AtomicInteger(1);
+    protected static final AtomicInteger idGenerator = new AtomicInteger(1);
     public int id;
     public ArrayList<Node> nodes;
     public ArrayList<Edge> edges;

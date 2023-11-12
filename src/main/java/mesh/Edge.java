@@ -6,19 +6,21 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Edge {
-    protected AtomicInteger idGenerator = new AtomicInteger(1);
+    private static final AtomicInteger idGenerator = new AtomicInteger(1);
     public int id;
     public Node start;
     public Node end;
     public double flux;
-    public double convection;
+    public double convectionT;
+    public double convectionAlpha;
 
     public Edge() {
         this.id = idGenerator.getAndIncrement();
         this.start = null;
         this.end = null;
         this.flux = 0;
-        this.convection = 0;
+        this.convectionT = 0;
+        this.convectionAlpha = 0;
     }
 
     public Edge(Node start, Node end) {
@@ -27,10 +29,11 @@ public class Edge {
         this.end = end;
     }
 
-    public Edge(Node start, Node end, double flux, double convection) {
+    public Edge(Node start, Node end, double flux, double convectionT, double convectionAlpha) {
         this(start, end);
         this.flux = flux;
-        this.convection = convection;
+        this.convectionT = convectionT;
+        this.convectionAlpha = convectionAlpha;
     }
 
     public double length() {

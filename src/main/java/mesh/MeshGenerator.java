@@ -78,7 +78,8 @@ public class MeshGenerator {
                             nodes1.get(col),
                             nodes1.get(col + 1),
                             0,
-                            environment.alpha * environment.T
+                            environment.T,
+                            environment.alpha
                     )
             );
         }
@@ -91,7 +92,8 @@ public class MeshGenerator {
                             nodes1.get(row * (hCount1 + 1)),
                             nodes1.get((row + 1) * (hCount1 + 1)),
                             0,
-                            environment.alpha * environment.T
+                            environment.T,
+                            environment.alpha
                     )
             );
             // Add vertical edges (inner for area 1)
@@ -109,7 +111,8 @@ public class MeshGenerator {
                             nodes1.get(row * (hCount1 + 1) + hCount1),
                             nodes1.get((row + 1) * (hCount1 + 1) + hCount1),
                             0,
-                            environment.alpha * environment.T
+                            environment.T,
+                            environment.alpha
                     )
             );
 
@@ -267,6 +270,7 @@ public class MeshGenerator {
                             nodes2.get(vCount2 * (hCount2 + 1) + col),
                             nodes2.get(vCount2 * (hCount2 + 1) + col + 1),
                             environment.q,
+                            0,
                             0
                     )
             );
@@ -372,7 +376,8 @@ public class MeshGenerator {
                             nodes3.get(col),
                             nodes3.get(col + 1),
                             0,
-                            environment.alpha * environment.T
+                            environment.T,
+                            environment.alpha
                     )
             );
         }
@@ -424,6 +429,7 @@ public class MeshGenerator {
                             nodes3.get(vCount3 * (hCount3 + 1) + col),
                             nodes3.get(vCount3 * (hCount3 + 1) + col + 1),
                             environment.q,
+                            0,
                             0
                     )
             );
@@ -529,7 +535,8 @@ public class MeshGenerator {
                             nodes4.get(col),
                             nodes4.get(col + 1),
                             0,
-                            environment.alpha * environment.T
+                            environment.T,
+                            environment.alpha
                     )
             );
         }
@@ -581,6 +588,7 @@ public class MeshGenerator {
                             nodes4.get(vCount4 * (hCount4 + 1) + col),
                             nodes4.get(vCount4 * (hCount4 + 1) + col + 1),
                             environment.q,
+                            0,
                             0
                     )
             );

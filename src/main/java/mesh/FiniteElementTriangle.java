@@ -2,6 +2,10 @@ package mesh;
 
 public class FiniteElementTriangle extends FiniteElement {
 
+    private static double factorial2 = 2;
+    private static double factorial3 = 6;
+    private static double factorial4 = 24;
+
     public double area() {
         double semiPerimeter = 0;
         double[] edgeLengths = new double[3];
@@ -64,20 +68,52 @@ public class FiniteElementTriangle extends FiniteElement {
         return C;
     }
 
-//    double[][] calculateLocalMatrix(double lambda) {
-//        double S = area();
-//        double[] bVector = calculateBVector();
-//        double[] cVector = calculateCVector();
-//        double[][] localMatrix = new double[3][3];
-//        for (int i = 0; i < 3; i++) {
-//            for (int j = 0; j < 3; j++) {
-//                localMatrix[i][j] += lambda * (bVector[i] * bVector[j] + cVector[i] * cVector[j]) / (4 * S);
-//            }
-//        }
-//        return localMatrix;
-//    }
-//
-//    double[] calculateLocalVector() {
-//
-//    }
+    double[][] calculateLocalMatrix(double lambda) {
+        double S = area();
+        double[] bVector = calculateBVector();
+        double[] cVector = calculateCVector();
+        double[][] localMatrix = new double[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                localMatrix[i][j] += lambda * (bVector[i] * bVector[j] + cVector[i] * cVector[j]) / (4 * S);
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            Edge edge = this.edges.get(i);
+            if (edge.convectionAlpha == 0) continue;
+            double edgeLength = edge.length();
+            int localId1 = this.nodes.indexOf(edge.start);
+            int localId2 = this.nodes.indexOf(edge.end);
+            double convectionValue = edge.convectionAlpha * edgeLength / factorial3;
+            localMatrix[localId1][localId1] += 2 * convectionValue;
+            localMatrix[localId1][localId2] += convectionValue;
+            localMatrix[localId2][localId1] += convectionValue;
+            localMatrix[localId2][localId2] += 2 * convectionValue;
+        }
+        return localMatrix;
+    }
+
+    double[] calculateLocalVector() {
+        double[] localVector = new double[3];
+        for (int i = 0; i < 3; i++) {
+            Edge edge = this.edges.get(i);
+            if (edge.flux != 0) {
+                double edgeLength = edge.length();
+                int localId1 = this.nodes.indexOf(edge.start);
+                int localId2 = this.nodes.indexOf(edge.end);
+                double fluxValue = edge.flux * edgeLength / factorial2;
+                localVector[localId1] += fluxValue;
+                localVector[localId2] += fluxValue;
+            }
+            if (edge.convectionAlpha != 0) {
+                double edgeLength = edge.length();
+                int localId1 = this.nodes.indexOf(edge.start);
+                int localId2 = this.nodes.indexOf(edge.end);
+                double convectionValue = edge.convectionAlpha * edge.convectionT * edgeLength / factorial2;
+                localVector[localId1] += convectionValue;
+                localVector[localId2] += convectionValue;
+            }
+        }
+        return localVector;
+    }
 }
