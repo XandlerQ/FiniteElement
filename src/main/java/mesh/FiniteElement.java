@@ -22,4 +22,10 @@ public class FiniteElement {
     public void addEdge(Edge edge) {
         this.edges.add(edge);
     }
+
+    public void render() {
+        for (Edge edge: this.edges) {
+            edge.render();
+        }
+    }
 }

@@ -1,0 +1,17 @@
+{
+  "body": {
+    "material": {
+      "lambda": 1.0
+    },
+    "shape": {
+      "d": 0.5,
+      "h": 1.0,
+      "t": 0.1
+    }
+  },
+  "environment": {
+    "alpha": 1.0,
+    "T": 120,
+    "q": 200
+  }
+}

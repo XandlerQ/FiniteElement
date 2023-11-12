@@ -1,5 +1,8 @@
 package mesh;
 
+import app.App;
+
+import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Node {
@@ -32,5 +35,10 @@ public class Node {
 
     public static double distance(Node node1, Node node2) {
         return Math.sqrt((node1.x - node2.x) * (node1.x - node2.x) + (node1.y - node2.y) * (node1.y - node2.y));
+    }
+
+    public void render() {
+        App.processingRef.stroke(Color.BLACK.getRGB());
+        app.App.processingRef.circle((float)(App.scaleParameter * this.x), (float)(App.scaleParameter * this.y), 3);
     }
 }
