@@ -8,13 +8,13 @@ import scene.Scene;
 
 public class Solver {
     private Scene scene;
-    private Matrix Ke;
-    private Matrix fe;
+    private Matrix K;
+    private Matrix f;
 
     public Solver() {
         this.scene = null;
-        this.Ke = null;
-        this.fe = null;
+        this.K = null;
+        this.f = null;
     }
 
     public Solver(Scene scene) {
@@ -34,23 +34,23 @@ public class Solver {
         if (this.scene == null) return;
         TriangleMesh2D triangleMesh2D = this.scene.getTriangleMesh2D();
         int dimensions = triangleMesh2D.getNodes().size();
-        this.Ke = new Matrix(dimensions, dimensions, 0);
-        this.fe = new Matrix(dimensions, 1, 0);
+        this.K = new Matrix(dimensions, dimensions, 0);
+        this.f = new Matrix(dimensions, 1, 0);
         for (FiniteElementTriangle finiteElementTriangle: triangleMesh2D.getFiniteElements()) {
             int[] globalNodeIds = finiteElementTriangle.getNodeIds();
             double[][] localMatrix = finiteElementTriangle.calculateLocalMatrix(this.scene.getBody().material.lambda);
             double[] localVector = finiteElementTriangle.calculateLocalVector();
             for (int i = 0; i < 3; i++) {
-                this.fe.set(
+                this.f.set(
                         globalNodeIds[i],
                         0,
-                        this.fe.get(globalNodeIds[i], 0) + localVector[i]
+                        this.f.get(globalNodeIds[i], 0) + localVector[i]
                 );
                 for (int j = 0; j < 3; j++) {
-                    this.Ke.set(
+                    this.K.set(
                             globalNodeIds[i],
                             globalNodeIds[j],
-                            this.Ke.get(globalNodeIds[i], globalNodeIds[j]) + localMatrix[i][j]
+                            this.K.get(globalNodeIds[i], globalNodeIds[j]) + localMatrix[i][j]
                     );
                 }
             }
@@ -59,7 +59,7 @@ public class Solver {
 
     public void solve() {
         fillSystem();
-        Matrix solution = this.Ke.solve(this.fe);
+        Matrix solution = this.K.solve(this.f);
         for (int i = 0; i < this.getScene().getTriangleMesh2D().getNodes().size(); i++) {
             Node node = this.scene.getTriangleMesh2D().getNodes().get(i);
             node.value = solution.get(i, 0);
