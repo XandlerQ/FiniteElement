@@ -1,5 +1,9 @@
 package mesh;
 
+import app.App;
+
+import java.awt.*;
+
 public class FiniteElementTriangle extends FiniteElement {
 
     private static double factorial2 = 2;
@@ -24,7 +28,7 @@ public class FiniteElementTriangle extends FiniteElement {
         return Math.sqrt(sqArea);
     }
 
-    int[] getNodeIds() {
+    public int[] getNodeIds() {
         int[] nodeIds = new int[3];
         nodeIds[0] = this.nodes.get(0).id;
         nodeIds[1] = this.nodes.get(1).id;
@@ -32,13 +36,17 @@ public class FiniteElementTriangle extends FiniteElement {
         return  nodeIds;
     }
 
-    double[] calculateAVector() {
-        double x1 = this.nodes.get(1).x;
-        double x2 = this.nodes.get(2).x;
-        double x3 = this.nodes.get(3).x;
-        double y1 = this.nodes.get(1).y;
-        double y2 = this.nodes.get(2).y;
-        double y3 = this.nodes.get(3).y;
+    public double getAverageValue() {
+        return (this.nodes.get(0).value + this.nodes.get(1).value + this.nodes.get(2).value) / 3;
+    }
+
+    public double[] calculateAVector() {
+        double x1 = this.nodes.get(0).x;
+        double x2 = this.nodes.get(1).x;
+        double x3 = this.nodes.get(2).x;
+        double y1 = this.nodes.get(0).y;
+        double y2 = this.nodes.get(1).y;
+        double y3 = this.nodes.get(2).y;
         double[] A = new double[3];
         A[0] = x2 * y3 - x3 * y2;
         A[1] = x3 * y1 - x1 - y3;
@@ -46,10 +54,10 @@ public class FiniteElementTriangle extends FiniteElement {
         return A;
     }
 
-    double[] calculateBVector() {
-        double y1 = this.nodes.get(1).y;
-        double y2 = this.nodes.get(2).y;
-        double y3 = this.nodes.get(3).y;
+    public double[] calculateBVector() {
+        double y1 = this.nodes.get(0).y;
+        double y2 = this.nodes.get(1).y;
+        double y3 = this.nodes.get(2).y;
         double[] B = new double[3];
         B[0] = y2 - y3;
         B[1] = y3 - y1;
@@ -57,10 +65,10 @@ public class FiniteElementTriangle extends FiniteElement {
         return B;
     }
 
-    double[] calculateCVector() {
-        double x1 = this.nodes.get(1).x;
-        double x2 = this.nodes.get(2).x;
-        double x3 = this.nodes.get(3).x;
+    public double[] calculateCVector() {
+        double x1 = this.nodes.get(0).x;
+        double x2 = this.nodes.get(1).x;
+        double x3 = this.nodes.get(2).x;
         double[] C = new double[3];
         C[0] = x3 - x2;
         C[1] = x1 - x3;
@@ -68,7 +76,7 @@ public class FiniteElementTriangle extends FiniteElement {
         return C;
     }
 
-    double[][] calculateLocalMatrix(double lambda) {
+    public double[][] calculateLocalMatrix(double lambda) {
         double S = area();
         double[] bVector = calculateBVector();
         double[] cVector = calculateCVector();
@@ -93,7 +101,7 @@ public class FiniteElementTriangle extends FiniteElement {
         return localMatrix;
     }
 
-    double[] calculateLocalVector() {
+    public double[] calculateLocalVector() {
         double[] localVector = new double[3];
         for (int i = 0; i < 3; i++) {
             Edge edge = this.edges.get(i);
@@ -115,5 +123,18 @@ public class FiniteElementTriangle extends FiniteElement {
             }
         }
         return localVector;
+    }
+
+    public void render(Color color) {
+        App.processingRef.stroke(color.getRGB());
+        App.processingRef.fill(color.getRGB());
+        App.processingRef.triangle(
+                App.shiftX + (float)(App.scaleParameter * this.nodes.get(0).x),
+                App.shiftY + (float)(App.scaleParameter * this.nodes.get(0).y),
+                App.shiftX + (float)(App.scaleParameter * this.nodes.get(1).x),
+                App.shiftY + (float)(App.scaleParameter * this.nodes.get(1).y),
+                App.shiftX + (float)(App.scaleParameter * this.nodes.get(2).x),
+                App.shiftY + (float)(App.scaleParameter * this.nodes.get(2).y)
+        );
     }
 }

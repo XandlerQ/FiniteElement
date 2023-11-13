@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Node {
-    private static final AtomicInteger idGenertor = new AtomicInteger(1);
+    private static final AtomicInteger idGenertor = new AtomicInteger(0);
     public int id;
     public double x;
     public double y;
@@ -39,6 +39,9 @@ public class Node {
 
     public void render() {
         App.processingRef.stroke(Color.BLACK.getRGB());
-        app.App.processingRef.circle((float)(App.scaleParameter * this.x), (float)(App.scaleParameter * this.y), 3);
+        App.processingRef.circle(App.shiftX + (float)(App.scaleParameter * this.x), App.shiftY + (float)(App.scaleParameter * this.y), 3);
+//        App.processingRef.textSize(10);
+//        App.processingRef.fill(Color.BLACK.getRGB());
+//        App.processingRef.text((float)this.value, App.shiftX + (float)(App.scaleParameter * this.x), App.shiftY + (float)(App.scaleParameter * this.y));
     }
 }

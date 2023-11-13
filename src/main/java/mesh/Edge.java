@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Edge {
-    private static final AtomicInteger idGenerator = new AtomicInteger(1);
+    private static final AtomicInteger idGenerator = new AtomicInteger(0);
     public int id;
     public Node start;
     public Node end;
@@ -43,10 +43,10 @@ public class Edge {
     public void render() {
         App.processingRef.stroke(Color.BLACK.getRGB());
         App.processingRef.line(
-                (float)(App.scaleParameter * this.start.x),
-                (float)(App.scaleParameter * this.start.y),
-                (float)(App.scaleParameter * this.end.x),
-                (float)(App.scaleParameter * this.end.y)
+                App.shiftX + (float)(App.scaleParameter * this.start.x),
+                App.shiftY + (float)(App.scaleParameter * this.start.y),
+                App.shiftX + (float)(App.scaleParameter * this.end.x),
+                App.shiftY + (float)(App.scaleParameter * this.end.y)
         );
         this.start.render();
         this.end.render();
