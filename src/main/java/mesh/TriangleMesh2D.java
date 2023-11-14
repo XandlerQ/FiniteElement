@@ -38,6 +38,15 @@ public class TriangleMesh2D {
         this.finiteElements.add(finiteElement);
     }
 
+    public double evaluateAt(double x, double y) {
+        for (FiniteElementTriangle finiteElementTriangle: this.finiteElements) {
+            if (finiteElementTriangle.contains(x, y)) {
+                return finiteElementTriangle.evaluateAt(x, y);
+            }
+        }
+        return Double.NaN;
+    }
+
     public void render() {
         double maxValue = Double.MIN_VALUE;
         double minValue = Double.MAX_VALUE;
